@@ -1,0 +1,13 @@
+{
+  "name": "secure-task-management-dashboard",
+  "version": "1.0.0",
+  "description": "Secure Task Management Dashboard - FullStack Integration Task",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
