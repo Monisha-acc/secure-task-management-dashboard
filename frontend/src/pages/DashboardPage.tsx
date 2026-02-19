@@ -7,12 +7,14 @@ import Header from '../components/Header';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
 import FilterBar, { Filters } from '../components/FilterBar';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 export default function DashboardPage() {
   const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filters, setFilters] = useState<Filters>({ search: '', status: 'all', priority: 'all' });
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   // Fetch tasks with react-query — auto-refetch on window focus
   const { data: tasks = [], isLoading } = useQuery({
@@ -96,7 +98,7 @@ export default function DashboardPage() {
                   key={task.id}
                   task={task}
                   onEdit={handleEdit}
-                  onDelete={(id) => deleteMutation.mutate(id)}
+                  onDelete={(id) => setDeleteTarget(id)}
                   onStatusChange={handleStatusChange}
                 />
               ))}
@@ -112,6 +114,14 @@ export default function DashboardPage() {
         task={editingTask}
         isLoading={createMutation.isPending || updateMutation.isPending}
       />
+
+      <ConfirmDialog
+        isOpen={deleteTarget !== null}
+        title="Delete Task"
+        message="This task will be permanently removed. This action cannot be undone."
+        onConfirm={() => { if (deleteTarget !== null) { deleteMutation.mutate(deleteTarget); setDeleteTarget(null); } }}
+        onCancel={() => setDeleteTarget(null)}
+/>
     </div>
   );
 }
