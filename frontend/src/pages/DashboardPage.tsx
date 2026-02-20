@@ -10,6 +10,7 @@ import FilterBar, { Filters } from '../components/FilterBar';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Toast from '../components/Toast';
 import { useToast } from '../hooks/useToast';
+import TaskSkeleton from '../components/TaskSkeleton.tsx';
 
 export default function DashboardPage() {
   const queryClient = useQueryClient();
@@ -35,7 +36,7 @@ export default function DashboardPage() {
   onError: () => addToast('error', 'Failed to create task'),
 });
 
-const updateMutation = useMutation({
+  const updateMutation = useMutation({
   mutationFn: ({ id, payload }: { id: number; payload: UpdateTaskPayload }) => updateTask(id, payload),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['tasks'] });
@@ -46,7 +47,7 @@ const updateMutation = useMutation({
   onError: () => addToast('error', 'Failed to update task'),
 });
 
-const deleteMutation = useMutation({
+  const deleteMutation = useMutation({
   mutationFn: deleteTask,
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['tasks'] });
@@ -93,10 +94,10 @@ const deleteMutation = useMutation({
         />
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-24">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : filtered.length === 0 ? (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {Array.from({ length: 6 }).map((_, i) => <TaskSkeleton key={i} />)}
+  </div>
+) : filtered.length === 0 ? (
           <div className="text-center py-24 text-slate-500">
             <svg className="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
