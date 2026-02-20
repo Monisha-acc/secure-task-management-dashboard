@@ -22,7 +22,7 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// 404 handler — must be after all routes
+// Catch-all for undefined routes — must be placed after all valid routes
 app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
