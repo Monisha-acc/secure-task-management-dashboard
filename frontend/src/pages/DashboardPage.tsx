@@ -8,6 +8,8 @@ import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
 import FilterBar, { Filters } from '../components/FilterBar';
 import ConfirmDialog from '../components/ConfirmDialog';
+import Toast from '../components/Toast';
+import { useToast } from '../hooks/useToast';
 
 export default function DashboardPage() {
   const queryClient = useQueryClient();
@@ -15,6 +17,7 @@ export default function DashboardPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filters, setFilters] = useState<Filters>({ search: '', status: 'all', priority: 'all' });
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const { toasts, addToast, removeToast } = useToast();
 
   // Fetch tasks with react-query — auto-refetch on window focus
   const { data: tasks = [], isLoading } = useQuery({
@@ -23,19 +26,34 @@ export default function DashboardPage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: createTask,
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['tasks'] }); setModalOpen(false); },
-  });
+  mutationFn: createTask,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    setModalOpen(false);
+    addToast('success', 'Task created!');
+  },
+  onError: () => addToast('error', 'Failed to create task'),
+});
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: UpdateTaskPayload }) => updateTask(id, payload),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['tasks'] }); setModalOpen(false); setEditingTask(null); },
-  });
+const updateMutation = useMutation({
+  mutationFn: ({ id, payload }: { id: number; payload: UpdateTaskPayload }) => updateTask(id, payload),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    setModalOpen(false);
+    setEditingTask(null);
+    addToast('success', 'Task updated!');
+  },
+  onError: () => addToast('error', 'Failed to update task'),
+});
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteTask,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-  });
+const deleteMutation = useMutation({
+  mutationFn: deleteTask,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    addToast('success', 'Task deleted');
+  },
+  onError: () => addToast('error', 'Failed to delete task'),
+});
 
   const handleSubmit = (data: CreateTaskPayload) => {
     if (editingTask) {
@@ -122,6 +140,8 @@ export default function DashboardPage() {
         onConfirm={() => { if (deleteTarget !== null) { deleteMutation.mutate(deleteTarget); setDeleteTarget(null); } }}
         onCancel={() => setDeleteTarget(null)}
 />
+
+      <Toast toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }
