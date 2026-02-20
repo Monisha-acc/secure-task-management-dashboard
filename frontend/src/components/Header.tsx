@@ -17,7 +17,7 @@ export default function Header({ tasks }: Props) {
 
   return (
     <header className="border-b border-surface-border bg-surface/80 backdrop-blur-sm sticky top-0 z-30">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
