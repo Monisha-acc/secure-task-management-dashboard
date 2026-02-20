@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +6,11 @@
 @layer base {
   body {
     @apply bg-surface text-slate-200 font-body;
+  }
+
+  /* Make date input calendar icon white */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
   }
 
   * {
