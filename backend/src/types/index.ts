@@ -1,3 +1,4 @@
+// Represents a user record in the database
 export interface User {
   id: number;
   username: string;
@@ -5,6 +6,7 @@ export interface User {
   created_at: string;
 }
 
+// Represents a task record in the database
 export interface Task {
   id: number;
   user_id: number;
@@ -17,6 +19,7 @@ export interface Task {
   updated_at: string;
 }
 
+// Payload for creating a new task — only title is required
 export interface CreateTaskBody {
   title: string;
   description?: string;
@@ -25,8 +28,10 @@ export interface CreateTaskBody {
   due_date?: string;
 }
 
+// All fields optional — allows partial updates to a task
 export interface UpdateTaskBody extends Partial<CreateTaskBody> {}
 
+// Payload for login and register requests
 export interface AuthRequest {
   username: string;
   password: string;

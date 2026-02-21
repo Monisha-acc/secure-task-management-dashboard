@@ -1,10 +1,14 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
+// Resolve absolute path to the SQLite database file
 const DB_PATH = path.join(__dirname, '../../data/tasks.db');
 
 // Initialise SQLite and create tables if they don't exist
 const db = new Database(DB_PATH);
+
+// Enable foreign key constraints — SQLite disables them by default
+db.pragma('foreign_keys = ON');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (

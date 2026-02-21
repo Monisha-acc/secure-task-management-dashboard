@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task, CreateTaskPayload } from '../types';
 
@@ -10,6 +10,7 @@ interface Props {
   isLoading?: boolean;
 }
 
+// Default values for a new task form
 const defaultForm: CreateTaskPayload = {
   title: '',
   description: '',
@@ -22,6 +23,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task, isLoading }
   const [form, setForm] = useState<CreateTaskPayload>(defaultForm);
 
   // Populate form when editing an existing task
+  // Reset to defaults when opening for a new task 
   useEffect(() => {
     if (task) {
       setForm({
@@ -36,7 +38,8 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task, isLoading }
     }
   }, [task, isOpen]);
 
-  const handleSubmit = (e: FormEvent) => {
+  // Convert empty due_date string to undefined before submitting
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     onSubmit({ ...form, due_date: form.due_date || undefined });
   };
@@ -45,7 +48,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task, isLoading }
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - clicking closes the modal*/}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -63,6 +66,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task, isLoading }
           >
             <div className="w-full max-w-lg card shadow-2xl">
               <div className="flex items-center justify-between mb-6">
+                 {/* Title changes based on create vs edit mode */}
                 <h2 className="font-display font-bold text-xl text-white">
                   {task ? 'Edit Task' : 'New Task'}
                 </h2>

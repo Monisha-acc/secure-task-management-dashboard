@@ -8,6 +8,7 @@ interface Props {
 export default function Header({ tasks }: Props) {
   const { username, logout } = useAuth();
 
+  // Compute task counts for stats pills and progress bar
   const stats = {
     total: tasks.length,
     done: tasks.filter((t) => t.status === "done").length,
@@ -91,7 +92,7 @@ export default function Header({ tasks }: Props) {
         </div>
       </div>
 
-      {/* Completion progress bar */}
+      {/* Completion progress bar - only shown when tasks exist */}
       {tasks.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-3">
           <div className="flex items-center gap-3">

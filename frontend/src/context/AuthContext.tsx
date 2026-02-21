@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
+// Shape of the authentication context available throughout the app
 interface AuthContextType {
   token: string | null;
   username: string | null;
@@ -10,10 +11,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Wraps the app and provides auth state to all child components
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
   const [username, setUsername] = useState<string | null>(() => localStorage.getItem('username'));
 
+  // Persist token and username to localStorage on login
   const login = (newToken: string, newUsername: string) => {
     localStorage.setItem('token', newToken);
     localStorage.setItem('username', newUsername);
@@ -21,6 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUsername(newUsername);
   };
 
+  // Clear all stored credentials on logout
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+//Shape of the decoded JWT payload
 interface JwtPayload {
   userId: number;
 }
@@ -9,6 +10,7 @@ interface JwtPayload {
 export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
+  //Token must follow "Bearer <token>" format
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     res.status(401).json({ message: 'No token provided' });
     return;

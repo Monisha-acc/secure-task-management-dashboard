@@ -8,6 +8,7 @@ const router = Router();
 // All task routes require a valid JWT
 router.use(authenticate);
 
+// Extend Request type to include userId injected by auth middleware
 type AuthReq = Request & { userId: number };
 
 // GET /api/tasks — fetch all tasks for the authenticated user
@@ -33,6 +34,7 @@ router.post('/', (req: Request, res: Response): void => {
     )
     .run(userId, title.trim(), description, status, priority, due_date);
 
+  // Return the newly created task with all fields  
   const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid) as Task;
   res.status(201).json(task);
 });
@@ -43,12 +45,14 @@ router.put('/:id', (req: Request, res: Response): void => {
   const taskId = Number(req.params.id);
   const updates = req.body as UpdateTaskBody;
 
+  // Verify task exists and belongs to the authenticated user
   const task = db.prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?').get(taskId, userId) as Task | undefined;
   if (!task) {
     res.status(404).json({ message: 'Task not found' });
     return;
   }
 
+  // Merge existing values with updates — only provided fields are changed
   const updated = {
     title: updates.title ?? task.title,
     description: updates.description ?? task.description,
@@ -61,6 +65,7 @@ router.put('/:id', (req: Request, res: Response): void => {
     `UPDATE tasks SET title=?, description=?, status=?, priority=?, due_date=?, updated_at=datetime('now') WHERE id=?`
   ).run(updated.title, updated.description, updated.status, updated.priority, updated.due_date, taskId);
 
+  // Return updated task with refreshed data
   const refreshed = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId) as Task;
   res.json(refreshed);
 });
@@ -70,6 +75,7 @@ router.delete('/:id', (req: Request, res: Response): void => {
   const { userId } = req as AuthReq;
   const taskId = Number(req.params.id);
 
+  // Verify ownership before deleting
   const task = db.prepare('SELECT id FROM tasks WHERE id = ? AND user_id = ?').get(taskId, userId);
   if (!task) {
     res.status(404).json({ message: 'Task not found' });

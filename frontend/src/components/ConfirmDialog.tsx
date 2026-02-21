@@ -8,11 +8,13 @@ interface Props {
   onCancel: () => void;
 }
 
+// Reusable confirmation dialog to prevent accidental destructive actions
 export default function ConfirmDialog({ isOpen, title, message, onConfirm, onCancel }: Props) {
   return (
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* Backdrop - clicking cancels the dialog */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -39,6 +41,7 @@ export default function ConfirmDialog({ isOpen, title, message, onConfirm, onCan
               <p className="text-slate-400 text-sm mb-6 ml-13">{message}</p>
               <div className="flex gap-3 justify-end">
                 <button onClick={onCancel} className="btn-ghost">Cancel</button>
+                {/* Red delete button - visually signals destructive action */}
                 <button
                   onClick={onConfirm}
                   className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors"

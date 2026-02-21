@@ -1,5 +1,6 @@
 import { Task } from '../types';
 
+// Filters state shape - 'all' means no filter applied
 export interface Filters {
   search: string;
   status: Task['status'] | 'all';
@@ -52,6 +53,7 @@ export default function FilterBar({ filters, onChange, onNewTask }: Props) {
         <option value="low">Low</option>
       </select>
 
+      {/* Opens the create task modal */}
       <button onClick={onNewTask} className="btn-primary whitespace-nowrap flex items-center gap-2 w-full sm:w-auto justify-center">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

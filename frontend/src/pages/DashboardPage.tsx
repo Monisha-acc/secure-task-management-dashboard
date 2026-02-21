@@ -26,6 +26,8 @@ export default function DashboardPage() {
     status: "all",
     priority: "all",
   });
+
+  // Stores the id of the task pending deletion — null means no deletion in progress
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const { toasts, addToast, removeToast } = useToast();
 
@@ -35,6 +37,7 @@ export default function DashboardPage() {
     queryFn: fetchTasks,
   });
 
+  // Invalidate tasks cache after every mutation to keep UI in sync
   const createMutation = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
@@ -66,6 +69,7 @@ export default function DashboardPage() {
     onError: () => addToast("error", "Failed to delete task"),
   });
 
+  // Handles both create and edit — determined by editingTask state
   const handleSubmit = (data: CreateTaskPayload) => {
     if (editingTask) {
       updateMutation.mutate({ id: editingTask.id, payload: data });
@@ -79,6 +83,7 @@ export default function DashboardPage() {
     setModalOpen(true);
   };
 
+  // Clicking status badge on a card cycles to the next status
   const handleStatusChange = (id: number, status: Task["status"]) => {
     updateMutation.mutate({ id, payload: { status } });
   };
@@ -108,6 +113,7 @@ export default function DashboardPage() {
           }}
         />
 
+        {/* Show skeletons while loading, empty state or task grid */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (

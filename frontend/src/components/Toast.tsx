@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Shape of a single toast notification
 export interface ToastMessage {
   id: string;
   type: 'success' | 'error';
@@ -12,6 +13,7 @@ interface Props {
   onRemove: (id: string) => void;
 }
 
+// Container that renders all active toasts in bottom-right corner
 export default function Toast({ toasts, onRemove }: Props) {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none">
@@ -24,6 +26,7 @@ export default function Toast({ toasts, onRemove }: Props) {
   );
 }
 
+// Individual toast item with auto-dismiss behaviour
 function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: string) => void }) {
   // Auto-dismiss after 3.5 seconds
   useEffect(() => {
@@ -31,6 +34,7 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: st
     return () => clearTimeout(timer);
   }, [toast.id, onRemove]);
 
+  // Green for success, red for error
   const isSuccess = toast.type === 'success';
 
   return (
@@ -45,6 +49,7 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: st
           : 'bg-red-500/10 border-red-500/30 text-red-400'
       }`}
     >
+      {/* Checkmark for success, X for error */}  
       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         {isSuccess ? (
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

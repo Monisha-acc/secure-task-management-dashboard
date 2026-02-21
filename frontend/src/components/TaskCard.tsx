@@ -8,7 +8,7 @@ interface Props {
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: Task["status"]) => void;
 }
-
+// Cycles status in order: todo → in-progress → done → todo
 const STATUS_CYCLE: Record<Task["status"], Task["status"]> = {
   todo: "in-progress",
   "in-progress": "done",
@@ -39,6 +39,7 @@ export default function TaskCard({
   onDelete,
   onStatusChange,
 }: Props) {
+  // Mark as overdue only if past due date and not yet completed
   const isOverdue =
     task.due_date && isPast(parseISO(task.due_date)) && task.status !== "done";
 
@@ -58,6 +59,7 @@ export default function TaskCard({
         >
           {task.title}
         </h3>
+         {/* Action buttons — visible on mobile, hover-only on desktop */}
         <div className="flex items-center gap-1.5 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit(task)}
@@ -122,6 +124,7 @@ export default function TaskCard({
           {task.priority}
         </span>
 
+         {/* Show overdue warning if past due date and not completed */}
         {task.due_date && (
           <span
             className={`badge ${isOverdue ? "bg-red-400/10 text-red-400" : "bg-slate-700/50 text-slate-300"}`}

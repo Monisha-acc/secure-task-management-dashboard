@@ -41,6 +41,7 @@ router.post("/register", (req: Request, res: Response): void => {
     return;
   }
 
+  // Prevent duplicate usernames
   const existing = db
     .prepare("SELECT id FROM users WHERE username = ?")
     .get(username);
@@ -49,11 +50,13 @@ router.post("/register", (req: Request, res: Response): void => {
     return;
   }
 
+  // Hash password with bcrypt before storing — never store plain text
   const password_hash = bcrypt.hashSync(password, 10);
   const result = db
     .prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)")
     .run(username, password_hash);
 
+  // Issue JWT token immediately after registration so user is logged in
   const token = jwt.sign(
     { userId: result.lastInsertRowid },
     process.env.JWT_SECRET as string,
@@ -76,11 +79,13 @@ router.post("/login", (req: Request, res: Response): void => {
     .prepare("SELECT * FROM users WHERE username = ?")
     .get(username) as User | undefined;
 
+  // Use vague error message to prevent username enumeration attacks
   if (!user || !bcrypt.compareSync(password, user.password_hash)) {
     res.status(401).json({ message: "Invalid credentials" });
     return;
   }
 
+  // Sign token with user id — frontend stores this for authenticated requests
   const token = jwt.sign(
     { userId: user.id },
     process.env.JWT_SECRET as string,
