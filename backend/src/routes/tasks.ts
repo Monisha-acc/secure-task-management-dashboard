@@ -11,12 +11,58 @@ router.use(authenticate);
 // Extend Request type to include userId injected by auth middleware
 type AuthReq = Request & { userId: number };
 
+/**
+ * @swagger
+ * /api/tasks:
+ *   get:
+ *     summary: Get all tasks for authenticated user
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of tasks
+ *       401:
+ *         description: Unauthorized
+ */
 // GET /api/tasks — fetch all tasks for the authenticated user
 router.get('/', (req: Request, res: Response): void => {
   const { userId } = req as AuthReq;
   const tasks = db.prepare('SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC').all(userId) as Task[];
   res.json(tasks);
 });
+
+/**
+ * @swagger
+ * /api/tasks:
+ *   post:
+ *     summary: Create a new task
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               priority:
+ *                 type: string
+ *               due_date:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Task created
+ *       401:
+ *         description: Unauthorized
+ */
 
 // POST /api/tasks — create a new task
 router.post('/', (req: Request, res: Response): void => {
@@ -38,6 +84,27 @@ router.post('/', (req: Request, res: Response): void => {
   const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid) as Task;
   res.status(201).json(task);
 });
+
+/**
+ * @swagger
+ * /api/tasks/{id}:
+ *   put:
+ *     summary: Update a task
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Task updated
+ *       404:
+ *         description: Task not found
+ */
 
 // PUT /api/tasks/:id — update a task (only owner can update)
 router.put('/:id', (req: Request, res: Response): void => {
@@ -69,6 +136,27 @@ router.put('/:id', (req: Request, res: Response): void => {
   const refreshed = db.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId) as Task;
   res.json(refreshed);
 });
+
+/**
+ * @swagger
+ * /api/tasks/{id}:
+ *   delete:
+ *     summary: Delete a task
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Task deleted
+ *       404:
+ *         description: Task not found
+ */
 
 // DELETE /api/tasks/:id — delete a task (only owner can delete)
 router.delete('/:id', (req: Request, res: Response): void => {

@@ -6,6 +6,30 @@ import { AuthRequest, User } from "../types";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       409:
+ *         description: Username already taken
+ */
+
 // POST /api/auth/register
 router.post("/register", (req: Request, res: Response): void => {
   const { username, password } = req.body as AuthRequest;
@@ -65,6 +89,30 @@ router.post("/register", (req: Request, res: Response): void => {
 
   res.status(201).json({ token, username });
 });
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful returns JWT token
+ *       401:
+ *         description: Invalid credentials
+ */
 
 // POST /api/auth/login
 router.post("/login", (req: Request, res: Response): void => {

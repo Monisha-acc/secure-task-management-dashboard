@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
 import taskRoutes from "./routes/tasks";
 import { errorHandler } from "./middleware/errorHandler";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger';
 
 dotenv.config();
 
@@ -19,6 +21,9 @@ app.use(express.json());
 // Route mounting
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
+
+// Swagger documentation route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check endpoint
 app.get("/api/health", (_req, res) => {
