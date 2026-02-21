@@ -10,8 +10,8 @@ export default {
       colors: {
         surface: {
           DEFAULT: '#0f1117',
-          card: '#1a1d27',
-          border: '#2a2d3a',
+          card: '#1e2235',
+          border: '#3a3d4a',
         },
         accent: {
           DEFAULT: '#6c63ff',

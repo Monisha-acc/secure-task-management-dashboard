@@ -14,7 +14,7 @@ interface Props {
 
 export default function FilterBar({ filters, onChange, onNewTask }: Props) {
   return (
-    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-6">
+    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-6 p-4 bg-surface-card rounded-xl border border-surface-border">
       {/* Search input */}
       <div className="relative flex-1 w-full">
         <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

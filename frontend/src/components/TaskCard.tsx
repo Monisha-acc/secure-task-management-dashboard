@@ -49,12 +49,12 @@ export default function TaskCard({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="card group hover:border-cyan-400/60 hover:shadow-xl hover:shadow-cyan-400/10 hover:-translate-y-1 transition-all duration-200"
+      className="card group hover:border-accent/60 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1 transition-all duration-200 min-h-32"
     >
       {/* Header row */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <h3
-          className={`font-display font-semibold text-white leading-snug ${task.status === "done" ? "line-through opacity-50" : ""}`}
+          className={`font-display font-semibold text-lg text-white leading-snug ${task.status === "done" ? "line-through opacity-50" : ""}`}
         >
           {task.title}
         </h3>
@@ -102,7 +102,7 @@ export default function TaskCard({
 
       {/* Description */}
       {task.description && (
-        <p className="text-slate-400 text-sm mb-3 leading-relaxed line-clamp-2">
+        <p className="text-slate-300 text-sm mb-3 leading-relaxed line-clamp-2">
           {task.description}
         </p>
       )}
@@ -124,7 +124,7 @@ export default function TaskCard({
 
         {task.due_date && (
           <span
-            className={`badge ${isOverdue ? "bg-red-400/10 text-red-400" : "bg-slate-700/50 text-slate-400"}`}
+            className={`badge ${isOverdue ? "bg-red-400/10 text-red-400" : "bg-slate-700/50 text-slate-300"}`}
           >
             {isOverdue && "⚠ "}
             {format(parseISO(task.due_date), "MMM d, yyyy")}

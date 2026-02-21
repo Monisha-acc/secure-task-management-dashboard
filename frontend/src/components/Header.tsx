@@ -43,30 +43,30 @@ export default function Header({ tasks }: Props) {
         {/* Stats pills — hidden on small screens */}
         <div className="hidden md:flex items-center gap-2">
           {[
-            { label: "Total", value: stats.total, color: "text-slate-300" },
-            { label: "Todo", value: stats.todo, color: "text-slate-400" },
+            { label: "Total", value: stats.total, color: "text-white" },
+            { label: "Todo", value: stats.todo, color: "text-slate-300" },
             {
               label: "In Progress",
               value: stats.inProgress,
-              color: "text-amber-400",
+              color: "text-amber-300",
             },
-            { label: "Done", value: stats.done, color: "text-emerald-400" },
+            { label: "Done", value: stats.done, color: "text-emerald-300" },
           ].map(({ label, value, color }) => (
             <div
               key={label}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-slate-600"
             >
               <span className={`font-display font-bold text-sm ${color}`}>
                 {value}
               </span>
-              <span className="text-slate-500 text-xs">{label}</span>
+              <span className="text-slate-300 text-xs">{label}</span>
             </div>
           ))}
         </div>
 
         {/* User area */}
         <div className="flex items-center gap-3">
-          <span className="text-slate-400 text-sm hidden sm:block">
+          <span className="text-slate-200 text-sm hidden sm:block">
             @{username}
           </span>
           <button
@@ -95,13 +95,13 @@ export default function Header({ tasks }: Props) {
       {tasks.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-3">
           <div className="flex items-center gap-3">
-            <div className="flex-1 bg-surface rounded-full h-1.5 overflow-hidden">
+            <div className="flex-1 bg-surface-border rounded-full h-1.5 overflow-hidden">
               <div
                 className="h-full bg-accent rounded-full transition-all duration-500"
                 style={{ width: `${(stats.done / stats.total) * 100}%` }}
               />
             </div>
-            <span className="text-xs text-slate-500 shrink-0">
+            <span className="text-xs text-slate-300 shrink-0">
               {Math.round((stats.done / stats.total) * 100)}% complete
             </span>
           </div>

@@ -15,6 +15,11 @@ router.post("/register", (req: Request, res: Response): void => {
     return;
   }
 
+  if (username.length < 3) {
+    res.status(400).json({ message: "Username must be at least 3 characters" });
+    return;
+  }
+
   if (password.length < 6) {
     res.status(400).json({ message: "Password must be at least 6 characters" });
     return;

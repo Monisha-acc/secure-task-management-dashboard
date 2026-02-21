@@ -6,6 +6,7 @@
 @layer base {
   body {
     @apply bg-surface text-slate-200 font-body;
+    background: radial-gradient(ellipse at top left, #1a1040 0%, #0f1117 50%);
   }
 
   /* Make date input calendar icon white */
@@ -36,7 +37,7 @@
     @apply text-slate-400 hover:text-slate-200 hover:bg-surface-card px-4 py-2 rounded-lg transition-all duration-200;
   }
   .input {
-    @apply bg-surface-card border border-surface-border text-slate-200 placeholder-slate-500 rounded-lg px-4 py-2.5 w-full focus:outline-none focus:border-accent transition-colors duration-200 font-body text-sm;
+    @apply bg-surface-card border border-surface-border text-slate-200 placeholder-slate-400 rounded-lg px-4 py-2.5 w-full focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors duration-200 font-body text-sm;
   }
   .card {
     @apply bg-surface-card border border-surface-border rounded-xl p-5;
