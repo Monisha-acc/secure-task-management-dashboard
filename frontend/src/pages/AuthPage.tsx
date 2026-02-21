@@ -13,21 +13,20 @@ export default function AuthPage() {
 
   // Dynamically calls login or register based on active tab
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const fn = isLogin ? loginUser : registerUser;
-      const { token, username: uname } = await fn({ username, password });
-      login(token, uname);
-    } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })
-        ?.response?.data?.message;
-      setError(msg || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  try {
+    const fn = isLogin ? loginUser : registerUser;
+    const { token, username: uname } = await fn({ username, password });
+    login(token, uname);
+  } catch (err: unknown) {
+    const msg = (err as { response?: { data?: { message?: string } } })
+      ?.response?.data?.message;
+    setLoading(false);
+    setError(msg || "Something went wrong");
+  }
+};
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center px-4">
@@ -101,10 +100,7 @@ export default function AuthPage() {
                 className="input"
                 placeholder="Enter username"
                 value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setError("");
-                }}
+                onChange={(e) => setUsername(e.target.value)}
                 required
                 autoFocus
               />
@@ -118,23 +114,16 @@ export default function AuthPage() {
                 className="input"
                 placeholder="Min. 6 chars, 1 number, 1 special character"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
 
             {/* Show error message from API response */}
             {error && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-sm bg-red-400/10 px-3 py-2 rounded-lg"
-              >
+              <p className="text-red-400 text-sm bg-red-400/10 px-3 py-2 rounded-lg">
                 {error}
-              </motion.p>
+              </p>
             )}
 
             <button
