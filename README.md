@@ -169,6 +169,19 @@ secure-task-management-dashboard/
 
 ---
 
+## Viewing the SQLite Database (Optional)
+The project uses a local SQLite database stored at:
+`backend/data/tasks.db`
+
+If you would like to inspect the database manually in VS Code:
+1. Press `Ctrl + Shift + X`
+2. Search for **SQLite Viewer**
+3. Install the extension
+4. Open `tasks.db`
+5. View tables and records directly
+
+Alternatively, you may use any SQLite-compatible database browser.
+
 ## API Endpoints
 
 | Method | Endpoint             | Auth | Description               |
